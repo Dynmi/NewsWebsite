@@ -1,0 +1,23 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/dyzx?serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    cache: false
+  mvc:
+    view:
+      prefix: /templates/
+      suffix: .html
+    static-path-pattern: /static/**
+    resources:
+      static-locations: classpath:/static/
+
+mybatis:
+  type-aliases-package: com.example.model
+  mapper-locations: classpath:mapper/*Mapper.xml
+server:
+  address: 0.0.0.0
