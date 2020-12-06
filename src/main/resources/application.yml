@@ -8,6 +8,8 @@ spring:
     prefix: classpath:/templates/
     suffix: .html
     cache: false
+    mode: HTML
+    encoding: UTF-8
   mvc:
     view:
       prefix: /templates/
@@ -15,9 +17,12 @@ spring:
     static-path-pattern: /static/**
     resources:
       static-locations: classpath:/static/
+    hiddenmethod:
+      filter:
+        enabled: true
+  serverlet:
+    content-type: text/html
 
 mybatis:
   type-aliases-package: com.example.model
   mapper-locations: classpath:mapper/*Mapper.xml
-server:
-  address: 0.0.0.0

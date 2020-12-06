@@ -30,6 +30,7 @@
 <link href="../static/css/layout.css" rel="stylesheet" type="text/css"/>
 <link href="../static/css/grey.css" rel="stylesheet" type="text/css" id="style_color"/>
 <link href="../static/css/custom.css" rel="stylesheet" type="text/css"/>
+	<link rel="shortcut icon" href="../static/img/favicon.ico" type="image/x-icon" />
 <!-- END THEME STYLES -->
 </head>
 <!-- END HEAD -->
@@ -92,7 +93,7 @@
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
-								<a href="extra_profile.html">
+								<a href="extra_profile.html" id="user_profile">
 								<i class="icon-user"></i> 个人中心 </a>
 							</li>
 							<li>
@@ -658,12 +659,17 @@ function userMessageReceive(){
 }
 function userinfo(){
 	var usersname=[[${session.user?.username}]];
-	if(usersname != null){
+	var userpermit=[[${session.user?.permission}]];
+	if(usersname != null)
 		{
 			$("#user_span").html(usersname);
-			$("#user_logout").html("<i class=\"icon-key\" ></i>登出");
+			$("#user_logout").attr("href","/loginOut").html("<i class=\"icon-key\" ></i>登出");
 		}
+	if(userpermit==0)
+	{
+		$("#user_profile").attr("href","/admincenter").html("<i class=\"icon-user\"></i> 管理中心");
 	}
+
 }
 </script>
 <!-- END JAVASCRIPTS -->

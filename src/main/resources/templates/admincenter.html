@@ -179,166 +179,167 @@
 		<!-- BEGIN CONTENT -->
 		<div class="page-content-wrapper">
 			<div class="page-content">
-					<!-- BEGIN PAGE HEADER-->
-					<h3 class="page-title">
-					个人中心 <small>用户个人页面示例</small>
-					</h3>
-					<div class="page-bar">
-						<ul class="page-breadcrumb">
-							<li>
-								<i class="fa fa-home"></i>
-								<a href="index.html">Home</a>
-								<i class="fa fa-angle-right"></i>
-							</li>
-							<li>
-								<a href="#">个人中心</a>
-							</li>
-						</ul>
-					</div>
-					<!-- END PAGE HEADER-->
-					<!-- BEGIN PAGE CONTENT-->
-					<div class="row">
-						<div class="col-md-12">
-							<!-- BEGIN PROFILE SIDEBAR -->
-							<div class="profile-sidebar" style="width:250px;">
-								<!-- PORTLET MAIN -->
-								<div class="portlet light profile-sidebar-portlet">
-									<!-- END SIDEBAR USERPIC -->
-									<!-- SIDEBAR USER TITLE -->
-									<div class="profile-usertitle">
-										<div class="profile-usertitle-name">
-											 王小美
-										</div>
-									</div>
-									<!-- END SIDEBAR USER TITLE -->
-									<!-- SIDEBAR MENU -->
-									<div class="profile-usermenu">
-										<ul class="nav">
-											<li class="active">
-												<a href="JavaScript:">
+				<!-- BEGIN PAGE HEADER-->
+				<h3 class="page-title">
+					管理中心 <small>欢迎您!管理员</small>
+				</h3>
+				<div class="page-bar">
+					<ul class="page-breadcrumb">
+						<li>
+							<i class="fa fa-home"></i>
+							<a href="index.html">Home</a>
+							<i class="fa fa-angle-right"></i>
+						</li>
+						<li>
+							<a href="#">管理中心</a>
+						</li>
+					</ul>
+				</div>
+				<!-- END PAGE HEADER-->
+				<!-- BEGIN PAGE CONTENT-->
+				<div class="row">
+					<div class="col-md-12">
+						<!-- BEGIN PROFILE SIDEBAR -->
+						<div class="profile-sidebar" style="width:250px;">
+							<!-- PORTLET MAIN -->
+							<div class="portlet light profile-sidebar-portlet">
+								<!-- END SIDEBAR USERPIC -->
+								<!-- SIDEBAR MENU -->
+								<div class="profile-usermenu">
+									<ul class="nav">
+										<li class="active">
+											<a href="JavaScript:">
 												<i class="icon-settings"></i>
-												个人信息设置 </a>
-											</li>
-											<li>
-												<a href="page_todo.html" target="_blank">
+												用户管理</a>
+										</li>
+										<li>
+											<a href="newsmanage" target="_blank">
 												<i class="icon-check"></i>
-												我的收藏 </a>
-											</li>
-										</ul>
-									</div>
-									<!-- END MENU -->
+												新闻管理 </a>
+										</li>
+									</ul>
 								</div>
-								<!-- END PORTLET MAIN -->
+								<!-- END MENU -->
 							</div>
-							<!-- END BEGIN PROFILE SIDEBAR -->
-							<!-- BEGIN PROFILE CONTENT -->
-							<div class="profile-content">
-								<div class="row">
-									<div class="col-md-12">
-										<div class="portlet light">
-											<div class="portlet-title tabbable-line">
-												<div class="caption caption-md">
-													<i class="icon-globe theme-font hide"></i>
-													<span class="caption-subject font-blue-madison bold uppercase">个人信息</span>
-												</div>
-												<ul class="nav nav-tabs">
-													<li class="active">
-														<a href="#tab_1_1" data-toggle="tab">更换密码</a>
-													</li>
-													<li>
-														<a href="#tab_1_2" data-toggle="tab">喜好设置</a>
-													</li>
-												</ul>
+							<!-- END PORTLET MAIN -->
+						</div>
+						<!-- END BEGIN PROFILE SIDEBAR -->
+						<!-- BEGIN PROFILE CONTENT -->
+						<div class="profile-content">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="portlet light">
+										<div class="portlet-title tabbable-line">
+											<div class="caption caption-md">
+												<i class="icon-globe theme-font hide"></i>
+												<span
+														class="caption-subject font-blue-madison bold uppercase">用户管理</span>
 											</div>
-											<div class="portlet-body">
-												<div class="tab-content">
-													<!-- CHANGE PASSWORD TAB -->
-													<div class="tab-pane active" id="tab_1_1">
-														<form class="cpform" th:action="@{/changepassword}" th:object="${user}" method="post">
-															<div class="form-group">
-																<label class="control-label ">当前密码</label>
-																<input type="password" class="form-control placeholder-no-fix" name="oldpassword"/>
+										</div>
+										<div class="portlet-body">
+											<div class="tab-content">
+												<div class="tab-pane active" id="tab_1_1">
+													<div class="portlet box grey-cascade">
+														<div class="portlet-body">
+															<div id="sample_1_wrapper"
+																 class="dataTables_wrapper no-footer">
+																<div class="row">
+																	<div class="col-md-6 col-sm-6">
+																		<div id="sample_1_filter"
+																			 class="dataTables_filter">
+																			<label>Search:<input type="search"
+																								 class="form-control input-small input-inline"
+																								 placeholder=""
+																								 aria-controls="sample_1"></label>
+																		</div>
+																	</div>
+																</div>
+																<!--显示用户信息的表格-->
+																<div class="table-scrollable">
+																	<table
+																			class="table table-striped table-bordered table-hover dataTable no-footer"
+																			id="sample_1" role="grid"
+																			aria-describedby="sample_1_info">
+																		<thead>
+																		<tr role="row">
+																			<th class="sorting_asc" tabindex="0"
+																				aria-controls="sample_1"
+																				rowspan="1" colspan="1"
+																				aria-sort="ascending"
+																				aria-label=" Username: activate to sort column ascending" style="width: 200px;">
+																				Username
+																			</th>
+																			<th class="sorting_disabled"
+																				rowspan="1" colspan="1"
+																				aria-label="Status" style="width: 95px;">
+																				操作
+																			</th>
+																		</tr>
+																		</thead>
+																		<tbody>
+																		<tr class="gradeX even" role="row" th:each="m : ${users}">
+																			<td class="sorting_1" th:text="${m.username}">
+																				用户名
+																			</td>
+																			<td>
+																				<div class="btn-group btn-group-sm btn-group-solid">
+																					<button  th:attr="chg_uri=@{/namemanage/}+${m.username}" type="button" class="btn blue changeBtn">修改信息</button>
+																					<button  th:attr="del_uri=@{/usermanage/}+${m.username}" type="button" class="btn red deleteBtn">删除用户</button>
+																				</div>
+																			</td>
+																		</tr>
+																		</tbody>
+																	</table>
+																</div>
+																<div class="row">
+																	<div class="col-md-7 col-sm-7">
+																		<div class="dataTables_paginate paging_bootstrap_full_number"
+																			 id="sample_1_paginate">
+																			<ul class="pagination"
+																				style="visibility: visible;">
+																				<li class="prev disabled"><a
+																						href="#" title="First"><i
+																						class="fa fa-angle-double-left"></i></a>
+																				</li>
+																				<li class="prev disabled"><a
+																						href="#" title="Prev"><i
+																						class="fa fa-angle-left"></i></a>
+																				</li>
+																				<li class="active"><a href="#">1</a>
+																				</li>
+																				<li class="next"><a href="#"
+																									title="Next"><i
+																						class="fa fa-angle-right"></i></a>
+																				</li>
+																				<li class="next"><a href="#"
+																									title="Last"><i
+																						class="fa fa-angle-double-right"></i></a>
+																				</li>
+																			</ul>
+																		</div>
+																	</div>
+																</div>
 															</div>
-															<div class="form-group">
-																<label class="control-label ">新密码</label>
-																<input type="password" class="form-control placeholder-no-fix"id="new_password" name="password"/>
-															</div>
-															<div class="form-group">
-																<label class="control-label">再次输入新密码</label>
-																<input type="password" class="form-control placeholder-no-fix" name="rpassword"/>
-															</div>
-
-															<div class="margin-top-10">
-																<button type="submit" class="btn btn-primary btn-block uppercase">确认修改密码</button>
-															</div>
-
-														</form>
+														</div>
 													</div>
-													<!-- END CHANGE PASSWORD TAB -->
-													<!-- PRIVACY SETTINGS TAB -->
-													<div class="tab-pane" id="tab_1_2">
-														<form action="#">
-															<table class="table table-light table-hover">
-															<p>
-																选择你想要出现在推荐栏的新闻分类
-															</p>
-															<tr>
-																<td>
-																	 娱乐新闻
-																</td>
-																<td>
-																	<input type="checkbox" name="options" value="muse"/>
-																</td>
-															</tr>
-															<tr>
-																<td>
-																	 体育新闻
-																</td>
-																<td>
-																	<input type="checkbox" name="options" value="sports"/>
-																</td>
-															</tr>
-															<tr>
-																<td>
-																	 科技新闻
-																</td>
-																<td>
-																	<input type="checkbox" name="options" value="tech"/>
-																</td>
-															</tr>
-															<tr>
-																<td>
-																	 军事新闻
-																</td>
-																<td>
-																	<input type="checkbox" name="options" value="military"/>
-																</td>
-															</tr>
-															<tr>
-																<td>
-																	 财经新闻
-																</td>
-																<td>
-																	<input type="checkbox" name="options" value="finance"/>
-																</td>
-															</tr>
-															</table>
-															<!--end profile-settings-->
-															<div class="margin-top-10">
-																<button type="submit" value="保存" class="btn green-haze"/>
-															</div>
-														</form>
-													</div>
-													<!-- END PRIVACY SETTINGS TAB -->
+
 												</div>
 											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-							<!-- END PROFILE CONTENT -->
+						</div>
+						<!-- END PROFILE CONTENT -->
 					</div>
 				</div>
+				<form id="deleteuserForm"  method="post">
+					<input type="hidden" name="_method"  value="delete"/>
+				</form>
+				<form id="changeuserForm" method="post">
+					<input type="hidden" name="_method" value="put" />
+					<input type="hidden" name="username" autocomplete="off" id="newname"/>
+				</form>
 				<!-- END PAGE CONTENT-->
 			</div>
 		</div>
@@ -391,6 +392,39 @@
 <script src="../static/js/profile.js" type="text/javascript"></script>
 <script src="../static/js/login.js" type="text/javascript"></script>
 <!-- END PAGE LEVEL SCRIPTS -->
+<script>
+	$(".deleteBtn").click(function(){
+		var reconfirm=confirm("你确定要删除该用户吗？");
+		if(reconfirm)
+		{
+			$("#deleteuserForm").attr("action",$(this).attr("del_uri")).submit();
+			return false;
+		}
+		else
+		{
+			return false;
+		}
+		return false;
+	});
+
+</script>
+<script>
+	$(".changeBtn").click(function(){
+		var reconfirm=prompt("请输入新用户名：");
+		if(reconfirm==null || reconfirm =="")
+		{
+			return false;
+		}
+		else
+		{
+			$("#newname").attr("value",reconfirm);
+			$("#changeuserForm").attr("action",$(this).attr("chg_uri")).submit();
+			return false;
+		}
+		return false;
+	});
+
+</script>
 <script th:inline="javascript">
 jQuery(document).ready(function() {       
    // initiate layout and plugins
@@ -401,7 +435,6 @@ Profile.init(); // init page demo
 });
 function cpPassword() {
 	var cpPassword = [[${result}]];
-	if (cpPassword != null)
 		alert(cpPassword);
 }
 

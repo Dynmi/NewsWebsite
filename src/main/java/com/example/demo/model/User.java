@@ -6,22 +6,7 @@ public class User {
     private int favourite;
     private String collection;
     private int permission;
-    private String role;
 
-    public User() {
-        this.collection = "";
-        this.favourite = 00000;
-        this.permission= 1;
-        this.role="user";
-    }
-    public User(String username,String password) {
-        this.username = username;
-        this.password = password;
-        this.collection = "";
-        this.favourite = 00000;
-        this.permission=1;
-        this.role="user";
-    }
 
     public int getPermission() {
         return permission;
@@ -29,14 +14,6 @@ public class User {
 
     public void setPermission(int permission) {
         this.permission = permission;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
     }
 
     public String getUsername() {

@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import com.example.demo.interceptor.AdminInterceptor;
 import com.example.demo.interceptor.UserInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -12,5 +13,7 @@ public class LoginConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new UserInterceptor())
                 .addPathPatterns("/extra_profile.html");
+        registry.addInterceptor(new AdminInterceptor())
+                .addPathPatterns("/admincenter.html","/admincenter");
     }
 }

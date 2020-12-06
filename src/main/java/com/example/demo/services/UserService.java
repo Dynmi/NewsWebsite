@@ -5,6 +5,8 @@ import com.example.demo.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class UserService {
     //自动注入一个userDao
@@ -23,16 +25,16 @@ public class UserService {
         }
     }
     //用户登陆逻辑
-    public String login(User user) {
+    public String login(String username,String password) {
         //通过用户名获取用户
-        User dbUser = userDao.getOneUser(user.getUsername());
+        User dbUser = userDao.getOneUser(username);
 
         //若获取失败
         if (dbUser == null) {
             return "该用户不存在";
         }
         //获取成功后，将获取用户的密码和传入密码对比
-        else if (!dbUser.getPassword().equals(user.getPassword())){
+        else if (!dbUser.getPassword().equals(password)){
             return "密码或用户名错误";
         }
         else {
@@ -42,6 +44,22 @@ public class UserService {
         }
     }
 
-
+    //用户修改密码逻辑
+    public String chPassword(String username,String oldpassword,String password,String rpassword) {
+        //通过用户名获取用户
+        User cpUser = userDao.getOneUser(username);
+        //
+        //判断更改密码过程
+        if (cpUser == null) {
+            return "用户名输入错误";
+        } else if (!Objects.equals(password, rpassword)) {
+            return "两次密码不一致";
+        } else if (!cpUser.getPassword().equals(oldpassword)) {
+            return "密码或用户名错误";
+        } else {
+            userDao.updatePassword(password,username);
+            return "更改成功！";
+        }
+    }
 
 }
