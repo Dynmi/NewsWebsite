@@ -3,8 +3,7 @@ package com.example.demo.model;
 public class User {
     private String username;
     private String password;
-    private int favourite;
-    private String collection;
+    private String favourite;
     private int permission;
 
 
@@ -32,20 +31,14 @@ public class User {
         this.password = password;
     }
 
-    public int getfavourite() {
+    public String getfavourite() {
         return favourite;
     }
 
-    public void setfavourite(int favourite) {
+    public void setfavourite(String favourite) {
         this.favourite = favourite;
     }
 
-    public String getcollection() {
-        return collection;
-    }
 
-    public void setcollection(String collection) {
-        this.collection = collection;
-    }
 
 }

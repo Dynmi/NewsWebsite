@@ -26,9 +26,10 @@ public class AdminInterceptor implements HandlerInterceptor {
             response.sendRedirect("/login.html");
             return false;
         } else {
+            //判断用户权限
             User user = (User) session.getAttribute("user");
             int permit = user.getPermission();
-            if (permit == 1) {
+            if (permit == 0) {
                 log.info("未拥有管理员权限！");
                 response.sendRedirect("/index.html");
                 return false;

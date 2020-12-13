@@ -2,9 +2,12 @@ package com.example.demo.services;
 
 import com.example.demo.dao.UserDao;
 import com.example.demo.model.User;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -60,6 +63,21 @@ public class UserService {
             userDao.updatePassword(password,username);
             return "更改成功！";
         }
+    }
+
+    //用户修改喜好
+    public String setfav(String username,String options) {
+
+        userDao.setFav(options,username);
+        return "修改成功！";
+    }
+
+    //分页逻辑
+    public PageInfo findPage(int page, int pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<User> list=userDao.findAll();
+        PageInfo<User> pageInfo=new PageInfo<>(list); //将list（全部结果传进去） 泛型根据情况而定
+        return pageInfo;  //返回pageInfo对象给controller
     }
 
 }

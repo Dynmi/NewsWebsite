@@ -55,8 +55,8 @@
 	<div class="page-header-inner container">
 		<!-- BEGIN LOGO -->
 		<div class="page-logo">
-			<a href="index.html">
-			<img src="/img/logo-default.png" alt="logo" class="logo-default" style = "margin-top: 17px;" />
+			<a href="/index.html">
+			<img src="../static/img/logo-default.png" alt="logo" class="logo-default" style = "margin-top: 17px;" />
 			</a>
 			<div class="menu-toggler sidebar-toggler">
 				<!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -64,7 +64,7 @@
 		</div>
 		<!-- END LOGO -->
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
-		<a href="javascript:" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+		<a href="/javascript:" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
 		</a>
 		<!-- END RESPONSIVE MENU TOGGLER -->
 
@@ -76,7 +76,7 @@
 				<div class="input-group">
 					<input type="text" class="form-control" placeholder="搜索新闻..." name="query">
 					<span class="input-group-btn">
-					<a href="javascript:" class="btn submit"><i class="icon-magnifier"></i></a>
+					<a href="/javascript:" class="btn submit"><i class="icon-magnifier"></i></a>
 					</span>
 				</div>
 			</form>
@@ -89,27 +89,26 @@
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user">
-						<a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-						<img alt="" class="img-circle" src="/img/avatar3_small.jpg"/>
-						<span class="username username-hide-on-mobile">
-						测试用户名称</span>
-						<i class="fa fa-angle-down"></i>
+						<a href="/javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" >
+						<span class="username username-hide-on-mobile" id="user_span">
+						请登录</span>
+							<i class="fa fa-angle-down"></i>
 						</a>
 						<ul class="dropdown-menu dropdown-menu-default">
 							<li>
-								<a href="extra_profile.html">
-								<i class="icon-user"></i> 个人中心 </a>
+								<a href="/extra_profile.html" id="user_profile">
+									<i class="icon-user"></i> 个人中心 </a>
 							</li>
 							<li>
-								<a href="inbox.html">
-								<i class="icon-envelope-open"></i> 投稿窗口
+								<a href="/inbox.html">
+									<i class="icon-envelope-open"></i> 投稿窗口
 								</a>
 							</li>
 							<li class="divider">
 							</li>
 							<li>
-								<a href="login.html">
-								<i class="icon-key"></i> 退出登录 </a>
+								<a href="/login.html" id="user_logout">
+									<i class="icon-key" ></i> 登录 </a>
 							</li>
 						</ul>
 					</li>
@@ -142,38 +141,38 @@
 				<!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
 				<ul class="page-sidebar-menu page-sidebar-menu-hover-submenu " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200">
 					<li>
-						<a href="index.html">
+						<a href="/index.html">
 						<i class="icon-home"></i>
 						<span class="title">首页</span>
 						</a>
 					</li>
 					<li>
-						<a href="musenews.html">
+						<a href="/musenews.html">
 						<i class="icon-music-tone"></i>
 						<span class="title">娱乐</span>
 						</a>
 					</li>
 					<li  class="start active ">
-						<a href="sportsnews.html">
+						<a href="/sportsnews.html">
 						<i class="icon-flag"></i>
 						<span class="title">体育</span>
 						<span class="selected"></span>
 						</a>
 					</li>
 					<li>
-						<a href="technews.html">
+						<a href="/technews.html">
 						<i class="icon-chemistry"></i>
 						<span class="title">科技</span>
 						</a>
 					</li>
 					<li>
-						<a href="militarynews.html">
+						<a href="/militarynews.html">
 						<i class="icon-rocket"></i>
 						<span class="title">军事</span>
 						</a>
 					</li>
 					<li>
-						<a href="financenews.html">
+						<a href="/financenews.html">
 						<i class="icon-basket"></i>
 						<span class="title">财经</span>
 						</a>
@@ -195,11 +194,11 @@
 					<ul class="page-breadcrumb">
 						<li>
 							<i class="fa fa-home"></i>
-							<a href="index.html">Home</a>
+							<a href="/index.html">Home</a>
 							<i class="fa fa-angle-right"></i>
 						</li>
 						<li>
-							<a href="#">体育新闻</a>
+							<a href="/#">体育新闻</a>
 						</li>
 					</ul>
 				</div>
@@ -216,468 +215,26 @@
 							</div>
 						</div>
 							<div class="portlet-body">
-								<div class="scroller" style="height: 700px;" data-always-visible="1" data-rail-visible="0">
+								<div class="scroller"  data-always-visible="1" data-rail-visible="0">
 									<ul class="feeds">
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
+										<li th:each="m : ${news}">
+											<a th:href="@{/newsitem/}+${m.n_id}" >
+												<div class="col1">
+													<div class="cont">
+														<div class="cont-col2">
+															<div class="desc" style="font-size: 14px;" th:text="${m.title}">
+																体育新闻测试
+															</div>
 														</div>
 													</div>
 												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
+												<div class="col2">
+													<div style="width:90px;margin-top:5px;font-style: italic;color:grey;cursor: not-allowed; " th:text="${m.time}">
+														2020-12-11
+													</div>
 												</div>
-											</div>
 											</a>
 										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>
-										<li>
-											<a href="javascript:">
-											<div class="col1">
-												<div class="cont">
-													<div class="cont-col1">
-														<div class="label label-sm label-danger">
-															<i class="icon-flag"></i>
-														</div>
-													</div>
-													<div class="cont-col2">
-														<div class="desc">
-															体育新闻测试
-														</div>
-													</div>
-												</div>
-											</div>
-											<div class="col2">
-												<div class="date">
-													 20 mins
-												</div>
-											</div>
-											</a>
-										</li>	
 
 									</ul>
 								</div>	
@@ -689,8 +246,23 @@
 				</div>	
 				<!--START PAGE CHANGER-->
 				<div class="row">
-				<button type="button" class="btn btn-circle btn-success" style="margin-left:25px;margin-bottom:10px">←上一页</button>
-				<button type="button" class="btn btn-circle btn-primary" style="margin-left:10px;margin-bottom:10px">下一页→</button>
+					<ul class="pagination"
+						style="visibility: visible;margin-left: 70px;">
+						<li class="prev" th:class="${pageInfo.prePage} == 0 ? 'disabled':'' ">
+							<!-- 上一页-->
+							<a th:href="${pageInfo.prePage} == 0 ? 'javascript:void(0)':@{'/sportsnews/list?pageNum='+${pageInfo.prePage}}" title="上一页" aria-label="Previous">
+								<span aria-hidden="true">&laquo;</span>
+							</a>
+						</li>
+
+						<li  th:each="pageNum : ${pageInfo.navigatepageNums}"><a th:href="@{'/sportsnews/list?pageNum='+${pageNum}}">[[${pageNum}]]</a></li>
+
+						<li class="next" th:class="${pageInfo.nextPage} == 0 ? 'disabled':'' ">
+							<a th:href="${pageInfo.nextPage} == 0 ? 'javascript:void(0)':@{'/sportsnews/list?pageNum='+${pageInfo.nextPage}}" title="下一页"  aria-label="Next">
+								<span aria-hidden="true">&raquo;</span>
+							</a>
+						</li>
+					</ul>
 				</div>
 				<div class="clearfix">
 				</div>
@@ -767,11 +339,15 @@
 	}
 	function userinfo(){
 		var usersname=[[${session.user?.username}]];
-		if(usersname != null){
-			{
-				$("#user_span").html(usersname);
-				$("#user_logout").html("<i class=\"icon-key\" ></i>登出");
-			}
+		var userpermit=[[${session.user?.permission}]];
+		if(usersname != null)
+		{
+			$("#user_span").html(usersname);
+			$("#user_logout").attr("href","/loginOut").html("<i class=\"icon-key\" ></i>登出");
+		}
+		if(userpermit == 1)
+		{
+			$("#user_profile").attr("href","/admincenter").html("<i class=\"icon-user\"></i> 管理中心");
 		}
 	}
 </script>
