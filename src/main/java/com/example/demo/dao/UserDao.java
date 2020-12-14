@@ -18,7 +18,7 @@ public interface UserDao {
             ") values (#{username},#{password})"})
     int addUser(User user);
 
-    @Select("select *from user where u_id=#{u_id}")
+    @Select("select *from user where u_id=#{u_id} limit 1")
     User getUserById(int u_id);
 
     @Select("select * from user")

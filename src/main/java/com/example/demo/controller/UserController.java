@@ -171,7 +171,7 @@ public class UserController {
         return "page_todo";
     }
     //删除喜好
-    @DeleteMapping("/collectionmanage/{c_id}")//删除用户
+    @DeleteMapping("/collectionmanage/{c_id}")
     public String deletecollect(@PathVariable("c_id") Integer c_id, RedirectAttributes model) {
         if (c_id != null) {
             collectionDao.deleteById(c_id);

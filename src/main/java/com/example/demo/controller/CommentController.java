@@ -1,13 +1,17 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.CommentDao;
 import com.example.demo.dao.NewsDao;
 import com.example.demo.dao.UserDao;
+import com.example.demo.model.Comment;
 import com.example.demo.model.News;
 import com.example.demo.model.User;
 import com.example.demo.services.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -18,7 +22,8 @@ public class CommentController {
     private CommentService commentService;
     @Autowired
     private NewsDao newsDao;
-
+    @Autowired
+    private CommentDao commentDao;
     @Autowired
     private UserDao userDao;
 
@@ -42,5 +47,36 @@ public class CommentController {
                 return "redirect:/newsitem/" + newsid;
             }
         }
+    }
+    @DeleteMapping("/commentdelete/{c_id}")
+    public String deletecomment(@PathVariable("c_id") Integer c_id,Integer u_idnow, RedirectAttributes model) {
+        Comment comment=commentDao.Getonecomment(c_id);
+        Integer u_id=comment.getU_id();
+        Integer n_id=comment.getN_id();
+        if(u_idnow !=null)
+        {
+            if (c_id != null ) {
+                {
+                    User user=userDao.getUserById(u_idnow);
+                    if(user.getPermission()==1 || u_id==u_idnow)
+                    {
+                        commentDao.deleteCommentById(c_id);
+                        model.addFlashAttribute("result", "删除成功！");
+                    }
+                    else
+                    {
+                        model.addFlashAttribute("result", "你不可以删除他人的评论！");
+                    }
+                }
+
+            } else {
+                model.addFlashAttribute("result", "评论已不存在！");
+            }
+        }
+        else
+        {
+            model.addFlashAttribute("result", "请登录后再进行操作");
+        }
+        return "redirect:/newsitem/" + n_id;
     }
 }

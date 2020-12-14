@@ -24,7 +24,11 @@ public interface CommentDao {
          })
     List<Comment> findCommentByNid(int n_id);
 
+    @Select("select *from comment where c_id=#{c_id} limit 1")
+    Comment Getonecomment(int c_id);
     @Insert({ "insert into ", TABLE_NAME, "(", INSERT_FIELDS, ") values (#{u_id},#{contents},#{n_id})" })
     void insertComment(int u_id, String contents, int n_id);
 
+    @Delete({"delete from ", TABLE_NAME, " where c_id=#{id}"})
+    void deleteCommentById(int id);
 }

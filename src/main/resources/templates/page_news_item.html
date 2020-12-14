@@ -62,18 +62,18 @@
 		</div>
 		<!-- END LOGO -->
 		<!-- BEGIN RESPONSIVE MENU TOGGLER -->
-		<a href="/javascript:" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
+		<a href="javascript:" class="menu-toggler responsive-toggler" data-toggle="collapse" data-target=".navbar-collapse">
 		</a>
 		<!-- END RESPONSIVE MENU TOGGLER -->
 		<!-- BEGIN PAGE TOP -->
 		<div class="page-top">
 			<!-- BEGIN HEADER SEARCH BOX -->
 			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<form class="search-form search-form-expanded" action="extra_search.html" method="GET">
+			<form class="search-form search-form-expanded" th:action="@{/searchnews}" method="post">
 				<div class="input-group">
-					<input type="text" class="form-control" placeholder="搜索新闻..." name="query">
+					<input type="text" class="form-control" placeholder="搜索新闻..." name="newsname">
 					<span class="input-group-btn">
-					<a href="/javascript:" class="btn submit"><i class="icon-magnifier"></i></a>
+						<button type="submit" class="btn btn-success"><i class="icon-magnifier"></i></a></button>
 					</span>
 				</div>
 			</form>
@@ -86,7 +86,7 @@
 					<!-- BEGIN USER LOGIN DROPDOWN -->
 					<!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
 					<li class="dropdown dropdown-user">
-						<a href="/javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+						<a href="javascript:" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
 							<span class="username username-hide-on-mobile" id="user_span">
 						请登录</span>
 							<i class="fa fa-angle-down"></i>
@@ -252,7 +252,9 @@
 												</h4>
 												<p th:text="${comment.contents}">
 													 好棒好喜欢支持了
+
 												</p>
+												<button  th:attr="del_uri=@{/commentdelete/}+${comment.c_id}" style="margin-left: 650px;" type="button" class="btn red btn-xs deleteBtn">删除评论</button>
 											</div>
 										</div>
 										<div class="clearfix">
@@ -328,7 +330,10 @@
 		<input type="hidden" name="n_id" autocomplete="off" th:value="${news.n_id}"/>
 		<input type="hidden" name="title" autocomplete="off" th:value="${news.title}"/>
 	</form>
-	
+	<form id="deletecommentForm"  method="post">
+		<input type="hidden" name="_method"  value="delete"/>
+		<input type="hidden" name="u_idnow" autocomplete="off" th:value="${session.user?.u_id}"/>
+	</form>
 	<!-- END CONTAINER -->
 	<!-- BEGIN FOOTER -->
 	<div class="page-footer">
@@ -341,7 +346,6 @@
 	</div>
 	<!-- END FOOTER -->
 </div>
-
 
 <!-- BEGIN JAVASCRIPTS(Load javascripts at bottom, this will reduce page load time) -->
 <!-- BEGIN CORE PLUGINS -->
@@ -389,6 +393,18 @@ function showresult() {
 	if(result!= null)
 		alert(result);
 }
+$(".deleteBtn").click(function(){
+	var reconfirm=confirm("你确定要删除该评论吗？");
+	if(reconfirm)
+	{
+		$("#deletecommentForm").attr("action",$(this).attr("del_uri")).submit();
+		return false;
+	}
+	else
+	{
+		return false;
+	}
+});
 function collect()
 {
 	$("#collectform").attr("action","/collectnews").submit();
