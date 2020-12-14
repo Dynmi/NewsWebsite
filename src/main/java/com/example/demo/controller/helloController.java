@@ -11,8 +11,5 @@ public class helloController {
     public String submits(){
         return "inbox";
     }
-    @RequestMapping("/page_todo.html")
-    public String collection(){
-        return "page_todo";
-    }
+
 }

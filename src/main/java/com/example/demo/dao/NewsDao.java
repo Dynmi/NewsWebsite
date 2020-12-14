@@ -23,6 +23,9 @@ public interface NewsDao {
     @Select("select * from news")
     List<News> findAll();
 
+    @Select("SELECT * FROM news where title like '%${newsname}%'")
+    List<News> searchnews(String newsname);
+
     @Select("select * from news where category=#{category} order by n_id desc ")
     List<News> findnewsbycate(String category);
 

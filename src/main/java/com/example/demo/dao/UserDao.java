@@ -18,6 +18,9 @@ public interface UserDao {
             ") values (#{username},#{password})"})
     int addUser(User user);
 
+    @Select("select *from user where u_id=#{u_id}")
+    User getUserById(int u_id);
+
     @Select("select * from user")
     List<User> findAll();
 

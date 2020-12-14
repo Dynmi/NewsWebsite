@@ -1,9 +1,12 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.CollectionDao;
 import com.example.demo.dao.NewsDao;
 import com.example.demo.dao.UserDao;
 import com.example.demo.model.News;
+import com.example.demo.model.Collection;
 import com.example.demo.model.User;
+import com.example.demo.services.CollectionService;
 import com.example.demo.services.NewsService;
 import com.example.demo.services.UserService;
 import com.github.pagehelper.PageInfo;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,6 +33,10 @@ public class UserController {
     private NewsDao newsDao;
     @Autowired
     private NewsService newsService;
+    @Autowired
+    private CollectionService collectionService;
+    @Autowired
+    private CollectionDao collectionDao;
 
 
     //进入注册页面，使用Get请求，REST风格的URL能更有雅的处理问题
@@ -39,7 +47,7 @@ public class UserController {
 
     //注册用户，使用POST，传输数据
     @RequestMapping(value = "/register.html", method = RequestMethod.POST)
-    public String registerPost(Model model,
+    public String registerPost(RedirectAttributes  model,
                                //这里和模板中的th:object="${user}"对应起来
                                @ModelAttribute(value = "user") User user,
                                HttpServletRequest request) {
@@ -48,10 +56,10 @@ public class UserController {
         //将结果放入model中，在模板中可以取到model中的值
         if (result.equals("注册成功")) {
             request.getSession().setAttribute("user", user);
-            model.addAttribute("result", result);
+            model.addFlashAttribute("result", result);
             return "index";
         } else if (result.equals("该用户名已被使用")) {
-            model.addAttribute("result", result);
+            model.addFlashAttribute("result", result);
             return "register";
         }
         return "register";
@@ -63,7 +71,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login.html", method = RequestMethod.POST)
-    public String loginPost(Model model,
+    public String loginPost(RedirectAttributes  model,Model m,
                             String password,
                             String username,
                             HttpServletResponse response,
@@ -74,14 +82,14 @@ public class UserController {
             //添加到session中，session是一次会话，在本次会话中都可以取到session中的值
             //若是session中有用户存在则会覆盖原来的user，当session中的user存在时判定用户存在
             request.getSession().setAttribute("user", user);
-            model.addAttribute("result", result);
+            model.addFlashAttribute("result", result);
             return "redirect:/index";
 
         } else if (result.equals("该用户不存在")) {
-            model.addAttribute("result", result);
+            m.addAttribute("result", result);
             return "login";
         } else if (result.equals("密码或用户名错误")) {
-            model.addAttribute("result", result);
+            m.addAttribute("result", result);
             return "login";
         }
         return response.encodeRedirectURL("/login");
@@ -89,10 +97,10 @@ public class UserController {
 
     //登出
     @RequestMapping(value = "/loginOut", method = RequestMethod.GET)
-    public String loginOut(Model model, HttpSession session) {
+    public String loginOut(RedirectAttributes model, HttpSession session) {
         //从session中删除user属性，用户退出登录
         session.removeAttribute("user");
-        model.addAttribute("result", "登出成功！");
+        model.addFlashAttribute("result", "登出成功！");
         return "redirect:/index";
     }
 
@@ -138,7 +146,41 @@ public class UserController {
 
 
     }
-
+    //查看喜好
+    @RequestMapping("/page_todo.html")
+    public String collection(HttpServletRequest request,Model model){
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        Integer id=user.getU_id();
+        PageInfo<Collection> pageInfo = collectionService.findCollectionuid(1,10,id);
+        List<Collection> collections= pageInfo.getList();
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("collection", collections);
+        return "page_todo";
+    }
+    @RequestMapping("/page_todo/list")
+    public String collectionPage(HttpServletRequest request,Model model
+    ,@RequestParam(defaultValue = "1")int pageNum){
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("user");
+        Integer id=user.getU_id();
+        PageInfo<Collection> pageInfo = collectionService.findCollectionuid(pageNum,10,id);
+        List<Collection> collections= pageInfo.getList();
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("collection", collections);
+        return "page_todo";
+    }
+    //删除喜好
+    @DeleteMapping("/collectionmanage/{c_id}")//删除用户
+    public String deletecollect(@PathVariable("c_id") Integer c_id, RedirectAttributes model) {
+        if (c_id != null) {
+            collectionDao.deleteById(c_id);
+            model.addFlashAttribute("result", "删除成功！");
+        } else {
+            model.addFlashAttribute("result", "收藏已不存在！");
+        }
+        return "redirect:/page_todo.html";
+    }
 
     //管理模块
     @RequestMapping(value = {"/admincenter.html", "/admincenter"})
@@ -161,23 +203,23 @@ public class UserController {
     }
 
     @DeleteMapping("/usermanage/{username}")//删除用户
-    public String deleteUser(@PathVariable("username") String username, Model model) {
+    public String deleteUser(@PathVariable("username") String username, RedirectAttributes model) {
         if (username != null) {
             userDao.deleteByName(username);
-            model.addAttribute("result", "删除成功！");
+            model.addFlashAttribute("result", "删除成功！");
         } else {
-            model.addAttribute("result", "用户名不存在！");
+            model.addFlashAttribute("result", "用户名不存在！");
         }
         return "redirect:/admincenter";
     }
 
     @PutMapping(value = "/namemanage/{username}")
-    public String EditUser(@PathVariable(value = "username") String oldusername, String username, Model model) {
+    public String EditUser(@PathVariable(value = "username") String oldusername, String username, RedirectAttributes model) {
         if (oldusername != null && username != null) {
             userDao.updateUsername(oldusername, username);
-            model.addAttribute("result", "更改成功！");
+            model.addFlashAttribute("result", "更改成功！");
         } else {
-            model.addAttribute("result", "用户名为空！");
+            model.addFlashAttribute("result", "用户名为空！");
         }
 
         return "redirect:/admincenter";
@@ -244,14 +286,14 @@ public class UserController {
     }
 
     @PostMapping(value = "/editnews")
-    public String NewsEdit(Model model,int newsid,
+    public String NewsEdit(RedirectAttributes model,int newsid,
                               String title, String contents, String source, String category, String time) {
         if (title == null || title == "" || contents == null || contents == "" || source == "" || source == null || time == null || time == "") {
-            model.addAttribute("result", "填入内容不能为空！");
+            model.addFlashAttribute("result", "填入内容不能为空！");
             return "redirect:/newsmanage";
         } else {
             String result = newsService.Edit(title, contents, source, category, time, newsid);
-            model.addAttribute("result", result);
+            model.addFlashAttribute("result", result);
             return "redirect:/newsmanage";
         }
 

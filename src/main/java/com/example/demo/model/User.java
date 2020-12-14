@@ -5,7 +5,15 @@ public class User {
     private String password;
     private String favourite;
     private int permission;
+    private int u_id;
 
+    public void setU_id(int u_id) {
+        this.u_id = u_id;
+    }
+
+    public int getU_id() {
+        return u_id;
+    }
 
     public int getPermission() {
         return permission;

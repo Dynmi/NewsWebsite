@@ -12,7 +12,7 @@ public class LoginConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new UserInterceptor())
-                .addPathPatterns("/extra_profile.html");
+                .addPathPatterns("/extra_profile.html","/page_todo.html");
         registry.addInterceptor(new AdminInterceptor())
                 .addPathPatterns("/admincenter.html","/admincenter","/newsmanage.html", "/newsmanage","/newsmanage/list","/admincenter/list","/admincenter/newsmanage.html","news_edit","news_publish");
     }

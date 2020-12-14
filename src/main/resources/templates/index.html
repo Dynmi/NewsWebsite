@@ -69,11 +69,11 @@
 		<div class="page-top">
 			<!-- BEGIN HEADER SEARCH BOX -->
 			<!-- DOC: Apply "search-form-expanded" right after the "search-form" class to have half expanded search box -->
-			<form class="search-form search-form-expanded" action="extra_search.html" method="GET">
+			<form class="search-form search-form-expanded" th:action="@{/searchnews}" method="post">
 				<div class="input-group">
-					<input type="text" class="form-control" placeholder="搜索新闻..." name="query">
+					<input type="text" class="form-control" placeholder="搜索新闻..." name="newsname">
 					<span class="input-group-btn">
-					<a href="javascript:" class="btn submit"><i class="icon-magnifier"></i></a>
+						<button type="submit" class="btn btn-success"><i class="icon-magnifier"></i></a></button>
 					</span>
 				</div>
 			</form>
