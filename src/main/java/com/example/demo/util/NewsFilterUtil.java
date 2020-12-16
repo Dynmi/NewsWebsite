@@ -1,124 +1,294 @@
 package com.example.demo.util;
 
+import com.example.demo.model.SensitiveWord;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.util.CollectionUtils;
 
+import java.io.IOException;
 import java.util.*;
 /**
  * 敏感词汇过滤替换为*
  */
 
 public class NewsFilterUtil {
-    private final static String WORDS = "WORDS";
-    private final static String REPLACE_CHAR = "*";
-    private static HashMap sensitiveWordMap;
-
-    /**     * 最小匹配规则     */
-    private static int minMatchTYpe = 1;
-    /**     * 最大匹配规则     */
-    private static int maxMatchType = 2;
     /**
-     * 敏感词汇过滤替换为*     *
-     * @param text 待检测文字
-     * @return 替换后文字
+     /* 最小匹配规则，如：敏感词库["中国","中国人"]，语句："我是中国人"，匹配结果：我是[中国]人
      */
-    public static String replaceWords(String text,List<String> words) {
-        if (StringUtils.isBlank(text)) {
-            return text;
+    public static final int MinMatchTYpe = 1;
+    /**
+     * 最大匹配规则，如：敏感词库["中国","中国人"]，语句："我是中国人"，匹配结果：我是[中国人]
+     */
+    public static final int MaxMatchType = 2;
+
+    /**
+     * 敏感词集合
+     */
+    public static HashMap sensitiveWordMap;
+
+    /**
+     * 初始化敏感词库，构建DFA算法模型
+     *
+     * @param sensitiveWordSet 敏感词库
+     */
+    public static synchronized void init(Set<String> sensitiveWordSet) {
+        initSensitiveWordMap(sensitiveWordSet);
+    }
+
+    /**
+     * 初始化敏感词库，构建DFA算法模型
+     *
+     * @param sensitiveWordSet 敏感词库
+     */
+    private static void initSensitiveWordMap(Set<String> sensitiveWordSet) {
+        //初始化敏感词容器，减少扩容操作
+        sensitiveWordMap = new HashMap(sensitiveWordSet.size());
+        String key;
+        Map nowMap;
+        Map<String, String> newWorMap;
+        //迭代sensitiveWordSet
+        Iterator<String> iterator = sensitiveWordSet.iterator();
+        while (iterator.hasNext()) {
+            //关键字
+            key = iterator.next();
+            nowMap = sensitiveWordMap;
+            for (int i = 0; i < key.length(); i++) {
+                //转换成char型
+                char keyChar = key.charAt(i);
+                //库中获取关键字
+                Object wordMap = nowMap.get(keyChar);
+                //如果存在该key，直接赋值，用于下一个循环获取
+                if (wordMap != null) {
+                    nowMap = (Map) wordMap;
+                } else {
+                    //不存在则，则构建一个map，同时将isEnd设置为0，因为他不是最后一个
+                    newWorMap = new HashMap<>();
+                    //不是最后一个
+                    newWorMap.put("isEnd", "0");
+                    nowMap.put(keyChar, newWorMap);
+                    nowMap = newWorMap;
+                }
+
+                if (i == key.length() - 1) {
+                    //最后一个
+                    nowMap.put("isEnd", "1");
+                }
+            }
         }
-        if (CollectionUtils.isEmpty(words)) {
-            return text;
+    }
+
+    /**
+     * 判断文字是否包含敏感字符
+     *
+     * @param txt       文字
+     * @param matchType 匹配规则 1：最小匹配规则，2：最大匹配规则
+     * @return 若包含返回true，否则返回false
+     */
+    public static boolean contains(String txt, int matchType) {
+        boolean flag = false;
+        for (int i = 0; i < txt.length(); i++) {
+            //判断是否包含敏感字符
+            int matchFlag = checkSensitiveWord(txt, i, matchType);
+            //大于0存在，返回true
+            if (matchFlag > 0) {
+                flag = true;
+            }
         }
-        //屏蔽敏感词汇
-        return NewsFilterUtil.replaceSensitiveWord(words, text, NewsFilterUtil.maxMatchType);
+        return flag;
+    }
+
+    /**
+     * 判断文字是否包含敏感字符
+     *
+     * @param txt 文字
+     * @return 若包含返回true，否则返回false
+     */
+    public static boolean contains(String txt) {
+        return contains(txt, MaxMatchType);
+    }
+
+    /**
+     * 获取文字中的敏感词
+     *
+     * @param txt       文字
+     * @param matchType 匹配规则 1：最小匹配规则，2：最大匹配规则
+     * @return
+     */
+    public static Set<String> getSensitiveWord(String txt, int matchType) {
+        Set<String> sensitiveWordList = new HashSet<>();
+
+        for (int i = 0; i < txt.length(); i++) {
+            //判断是否包含敏感字符
+            int length = checkSensitiveWord(txt, i, matchType);
+            //存在,加入list中
+            if (length > 0) {
+                sensitiveWordList.add(txt.substring(i, i + length));
+                //减1的原因，是因为for会自增
+                i = i + length - 1;
+            }
+        }
+
+        return sensitiveWordList;
+    }
+
+    /**
+     * 获取文字中的敏感词
+     *
+     * @param txt 文字
+     * @return
+     */
+    public static Set<String> getSensitiveWord(String txt) {
+        return getSensitiveWord(txt, MaxMatchType);
     }
 
     /**
      * 替换敏感字字符
      *
-     * @param data      敏感字集合
-     * @param txt       待检查文本
-     * @param matchType 匹配规则
+     * @param txt         文本
+     * @param replaceChar 替换的字符
+     * @param matchType   敏感词匹配规则
+     * @return
      */
-    private static String replaceSensitiveWord(List<String> data, String txt, int matchType) {
-        if (sensitiveWordMap == null) {
-            addSensitiveWord(data);
-        }
+    public static String replaceSensitiveWord(String txt, char replaceChar, int matchType) {
         String resultTxt = txt;
         //获取所有的敏感词
-        List<String> set = getSensitiveWord(txt, matchType);
+        Set<String> set = getSensitiveWord(txt, matchType);
         Iterator<String> iterator = set.iterator();
+        String word;
+        String replaceString;
         while (iterator.hasNext()) {
-            resultTxt = resultTxt.replaceAll(iterator.next(), REPLACE_CHAR);
+            word = iterator.next();
+            replaceString = getReplaceChars(replaceChar, word.length());
+            resultTxt = resultTxt.replaceAll(word, replaceString);
         }
+
         return resultTxt;
     }
 
-
     /**
-     * 读取敏感词库，将敏感词放入HashSet中，构建一个DFA算法模型：
-     */
-    private static void addSensitiveWord(List<String> datas) {
-        sensitiveWordMap = new HashMap(datas.size());
-        Iterator<String> iterator = datas.iterator();
-        Map<String, Object> now = null;
-        Map now2 = null;
-        while (iterator.hasNext()) {
-            now2 = sensitiveWordMap;
-            String word = iterator.next().trim(); //敏感词
-            for (int i = 0; i < word.length(); i++) {
-                char key_word = word.charAt(i);
-                Object obj = now2.get(key_word);
-                if (obj != null) { //存在
-                    now2 = (Map) obj;
-                } else { //不存在
-                    now = new HashMap<String, Object>();
-                    now.put("isEnd", "0");
-                    now2.put(key_word, now);
-                    now2 = now;
-                }
-                if (i == word.length() - 1) {
-                    now2.put("isEnd", "1");
-                }
-            }
-        }
-    }
-
-    /**
-     * 获取内容中的敏感词
-     * @param text      内容
-     * @param matchType 匹配规则 1=不最佳匹配，2=最佳匹配
+     * 替换敏感字字符
+     *
+     * @param txt         文本
+     * @param replaceChar 替换的字符
      * @return
      */
-    private static List<String> getSensitiveWord(String text, int matchType) {
-        List<String> words = new ArrayList<String>();
-        Map now = sensitiveWordMap;
-        int count = 0; //初始化敏感词长度
-        int start = 0; //标志敏感词开始的下标
-        for (int i = 0; i < text.length(); i++) {
-            char key = text.charAt(i);
-            now = (Map) now.get(key);
-            if (now != null) { //存在
-                count++;
-                if (count == 1) {
-                    start = i;
+    public static String replaceSensitiveWord(String txt, char replaceChar) {
+        return replaceSensitiveWord(txt, replaceChar, MaxMatchType);
+    }
+
+    /**
+     * 替换敏感字字符
+     *
+     * @param txt        文本
+     * @param replaceStr 替换的字符串，匹配的敏感词以字符逐个替换
+     * @param matchType  敏感词匹配规则
+     * @return
+     */
+    public static String replaceSensitiveWord(String txt, String replaceStr, int matchType) {
+        String resultTxt = txt;
+        //获取所有的敏感词
+        Set<String> set = getSensitiveWord(txt, matchType);
+        Iterator<String> iterator = set.iterator();
+        String word;
+        while (iterator.hasNext()) {
+            word = iterator.next();
+            resultTxt = resultTxt.replaceAll(word, replaceStr);
+        }
+
+        return resultTxt;
+    }
+
+    /**
+     * 替换敏感字字符
+     *
+     * @param txt        文本
+     * @param replaceStr 替换的字符串，匹配的敏感词以字符逐个替换，如 语句：我爱中国人 敏感词：中国人，替换字符串：[屏蔽]，替换结果：我爱[屏蔽]
+     * @return
+     */
+    public static String replaceSensitiveWord(String txt, String replaceStr) {
+        return replaceSensitiveWord(txt, replaceStr, MaxMatchType);
+    }
+
+    /**
+     * 获取替换字符串
+     *
+     * @param replaceChar
+     * @param length
+     * @return
+     */
+    private static String getReplaceChars(char replaceChar, int length) {
+        String resultReplace = String.valueOf(replaceChar);
+        for (int i = 1; i < length; i++) {
+            resultReplace += replaceChar;
+        }
+
+        return resultReplace;
+    }
+
+    /**
+     * 检查文字中是否包含敏感字符，检查规则如下：
+     *
+     * @param txt
+     * @param beginIndex
+     * @param matchType
+     * @return 如果存在，则返回敏感词字符的长度，不存在返回0
+     */
+    private static int checkSensitiveWord(String txt, int beginIndex, int matchType) {
+        //敏感词结束标识位：用于敏感词只有1位的情况
+        boolean flag = false;
+        //匹配标识数默认为0
+        int matchFlag = 0;
+        char word;
+        Map nowMap = sensitiveWordMap;
+        for (int i = beginIndex; i < txt.length(); i++) {
+            word = txt.charAt(i);
+            //获取指定key
+            nowMap = (Map) nowMap.get(word);
+            //存在，则判断是否为最后一个
+            if (nowMap != null) {
+                //找到相应key，匹配标识+1
+                matchFlag++;
+                //如果为最后一个匹配规则,结束循环，返回匹配标识数
+                if ("1".equals(nowMap.get("isEnd"))) {
+                    //结束标志位为true
+                    flag = true;
+                    //最小规则，直接返回,最大规则还需继续查找
+                    if (MinMatchTYpe == matchType) {
+                        break;
+                    }
                 }
-                if ("1".equals(now.get("isEnd"))) { //敏感词结束
-                    now = sensitiveWordMap; //重新获取敏感词库
-                    words.add(text.substring(start, start + count)); //取出敏感词，添加到集合
-                    count = 0; //初始化敏感词长度
-                }
-            } else { //不存在
-                now = sensitiveWordMap;//重新获取敏感词库
-                if (count == 1 && matchType == 1) { //不最佳匹配
-                    count = 0;
-                } else if (count == 1 && matchType == 2) { //最佳匹配
-                    words.add(text.substring(start, start + count));
-                    count = 0;
-                }
+            } else {//不存在，直接返回
+                break;
             }
         }
-        return words;
+        //长度必须大于等于1，为词
+        if (matchFlag < 2 || !flag) {
+            matchFlag = 0;
+        }
+        return matchFlag;
     }
+
+
+    /**
+     * 敏感词替换工具方法（对外方法）
+     *
+     * @param string
+     * @return
+     */
+    public static String sensitiveHelper(String string, List<String> words) {
+
+        Set<String> sensitiveWordSet = new HashSet<>(words);
+
+        //初始化敏感词库
+        NewsFilterUtil.init(sensitiveWordSet);
+        //判断是否包含敏感词库
+        if (contains(string)){
+            //若包含返回替换后的字符
+            String str = NewsFilterUtil.replaceSensitiveWord(string, "**");
+            return str;
+        }
+        //不包含返回原本字符
+        return string;
+    }
+
 
 }

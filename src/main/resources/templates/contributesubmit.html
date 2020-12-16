@@ -171,6 +171,12 @@
 						<span class="title">财经</span>
 						</a>
 					</li>
+					<li th:each="cate : ${category}">
+						<a th:href="@{/newsextra/}+${cate.cate_id}">
+							<i class="icon-hourglass"></i>
+							<span class="title" th:text="${cate.name}">财经</span>
+						</a>
+					</li>
 				</ul>
 			</div>
 		</div>
@@ -243,6 +249,7 @@
 															<option value="科技新闻">科技新闻</option>
 															<option value="军事新闻">军事新闻</option>
 															<option value="财经新闻">财经新闻</option>
+															<option th:each="cate : ${category}" th:value="${cate.name}" th:text="${cate.name}">财经新闻</option>
 														</select>
 														<div class="col-md-6">
 															<div class="input-icon">

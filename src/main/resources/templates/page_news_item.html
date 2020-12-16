@@ -180,6 +180,12 @@
 								<span class="title">财经</span>
 							</a>
 						</li>
+						<li th:each="cate : ${category}">
+							<a th:href="@{/newsextra/}+${cate.cate_id}">
+								<i class="icon-hourglass"></i>
+								<span class="title" th:text="${cate.name}">财经</span>
+							</a>
+						</li>
 					</ul>
 					<!-- END SIDEBAR MENU -->
 				</div>
@@ -259,9 +265,6 @@
 												还没有人发表评论，不要让楼主等待太久哦！
 											</div>
 											<div class="media" th:each="comment:${comment}">
-												<a href="/javascript:" class="pull-left">
-													<img alt="" src="../static/img/9.jpg" class="media-object" />
-												</a>
 												<div class="media-body">
 													<h4 class="media-heading">
 														[[${comment.author.username}]]
@@ -290,13 +293,27 @@
 																		th:if="${comment.likes} ne 0 and ${comment.islike} ">[[${comment.likes}]]</span>
 																</a>
 															</li>
-															<li
-																class="dropdown dropdown-extended dropdown-notification">
+															<li class="dropdown dropdown-extended dropdown-notification">
 																<a th:attr="del_url=@{'/commentdelete/'+${comment.c_id}}"
 																	onclick="commentDelete(this)" title="删除评论">
 																	<i class="fa fa-trash-o fa-lg">
 																	</i>
 																</a>
+															</li>
+															<li class="dropdown dropdown-extended dropdown-notification">
+																<a th:attr="report_url=@{'/commentreport/'+${comment.c_id}}"
+																   onclick="commentReport(this)" title="举报评论"
+																   th:if="${not comment.isreport}">
+																	<i class="fa fa-thumbs-o-down">
+																	</i>
+																</a>
+																<a th:attr="report_url=@{'/commentreport/'+${comment.c_id}}"
+																   onclick="alreadyReported(this)" title="已举报"
+																   th:if="${comment.isreport}">
+																	<i class="fa fa-thumbs-down">
+																	</i>
+																</a>
+
 															</li>
 
 														</ul>
@@ -392,6 +409,11 @@
 			<input type="hidden" name="u_idnow" autocomplete="off" th:value="${session.user?.u_id}" />
 			<input type="hidden" name="n_idnow" autocomplete="off" th:value="${news.n_id}" />
 		</form>
+		<form id="commentreportForm" method="POST">
+			<input type="hidden" name="_method" value="report" />
+			<input type="hidden" name="u_name" autocomplete="off" th:value="${session.user?.username}" />
+			<input type="hidden" name="n_idnow" autocomplete="off" th:value="${news.n_id}" />
+		</form>
 		<!-- END CONTAINER -->
 		<!-- BEGIN FOOTER -->
 		<div class="page-footer">
@@ -467,6 +489,15 @@
 		}
 		function collect(parm) {
 			$("#collectform").attr("action", "/collectnews").submit();
+		}
+		function commentReport(parm) {
+			var reconfirm = confirm("你确定要举报该评论吗？")
+			if (reconfirm) {
+				$("#commentreportForm").attr("action", $(parm).attr("report_url")).submit();
+			}
+		}
+		function alreadyReported(){
+			alert("已经举报过啦！")
 		}
 	</script>
 	<!-- END JAVASCRIPTS -->

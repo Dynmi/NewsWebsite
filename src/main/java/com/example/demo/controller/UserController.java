@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dao.CollectionDao;
+import com.example.demo.dao.NewcategoryDao;
 import com.example.demo.dao.NewsDao;
 import com.example.demo.dao.UserDao;
+import com.example.demo.model.Newcategory;
 import com.example.demo.model.News;
 import com.example.demo.model.Collection;
 import com.example.demo.model.User;
@@ -30,13 +32,11 @@ public class UserController {
     @Autowired
     private UserDao userDao;
     @Autowired
-    private NewsDao newsDao;
-    @Autowired
-    private NewsService newsService;
-    @Autowired
     private CollectionService collectionService;
     @Autowired
     private CollectionDao collectionDao;
+    @Autowired
+    private NewcategoryDao newcategoryDao;
 
 
     //进入注册页面，使用Get请求，REST风格的URL能更有雅的处理问题
@@ -56,8 +56,8 @@ public class UserController {
         String result = userService.register(user);
         //将结果放入model中，在模板中可以取到model中的值
         if (result.equals("注册成功")) {
-            request.getSession().setAttribute("user", user);
-            model.addFlashAttribute("result", result);
+
+            model.addFlashAttribute("result", "注册成功！使用用户名和密码登录");
             return "redirect:/index";
         } else if (result.equals("该用户名已被使用")) {
             m.addAttribute("result", result);
@@ -157,6 +157,8 @@ public class UserController {
         List<Collection> collections= pageInfo.getList();
         model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("collection", collections);
+        List<Newcategory> category=newcategoryDao.findAll();
+        model.addAttribute("category",category);
         return "page_todo";
     }
     @RequestMapping("/page_todo/list")
@@ -169,9 +171,11 @@ public class UserController {
         List<Collection> collections= pageInfo.getList();
         model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("collection", collections);
+        List<Newcategory> category=newcategoryDao.findAll();
+        model.addAttribute("category",category);
         return "page_todo";
     }
-    //删除喜好
+    //删除收藏
     @DeleteMapping("/collectionmanage/{c_id}")
     public String deletecollect(@PathVariable("c_id") Integer c_id, RedirectAttributes model) {
         if (c_id != null) {
@@ -190,6 +194,8 @@ public class UserController {
         List<User> users= pageInfo.getList();
         m.addAttribute("pageInfo",pageInfo);
         m.addAttribute("users", users);
+        List<Newcategory> category=newcategoryDao.findAll();
+        m.addAttribute("category",category);
         return "admincenter";
     }
 

@@ -36,6 +36,9 @@ public interface NewsDao {
     @Select("select * from news where category=#{category} and istougao=0 order by n_id desc ")
     List<News> findnewsbycate(String category);
 
+    @Select("select * from news where category=#{category}")
+    List<News> findnewsbycategory(String category);
+
     @Select("select * from news where category=#{category} and istougao=0 order by n_id desc limit 0,#{num}")
     List<News> findNews(String category,int num);
 
@@ -47,6 +50,9 @@ public interface NewsDao {
 
     @Delete({"delete from ", TABLE_NAME, " where n_id=#{id}"})
     void deleteById(int id);
+
+    @Delete({"delete from news where category=#{category}"})
+    void deleteByCate(String category);
 
 
 

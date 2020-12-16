@@ -14,6 +14,7 @@ public class LoginConfig implements WebMvcConfigurer {
         registry.addInterceptor(new UserInterceptor())
                 .addPathPatterns("/extra_profile.html","/page_todo.html","/contributesubmit.html");
         registry.addInterceptor(new AdminInterceptor())
-                .addPathPatterns("/admincenter.html","/admincenter","/newsmanage.html", "/newsmanage","/newsmanage/list","/admincenter/list","/admincenter/newsmanage.html","/newsedit","news_publish");
+                .addPathPatterns("/adminmail.html","/adminmail","/admincenter.html","/admincenter","/newsmanage.html", "/newsmanage",
+                        "/newsmanage/list","/admincenter/list","/news_publish.html","/newsedit","/newsedit.html","news_publish");
     }
 }

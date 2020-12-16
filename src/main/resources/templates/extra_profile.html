@@ -171,6 +171,12 @@
 						<span class="title">财经</span>
 						</a>
 					</li>
+					<li th:each="cate : ${category}">
+						<a th:href="@{/newsextra/}+${cate.cate_id}">
+							<i class="icon-hourglass"></i>
+							<span class="title" th:text="${cate.name}">财经</span>
+						</a>
+					</li>
 				</ul>
 				<!-- END SIDEBAR MENU -->
 			</div>

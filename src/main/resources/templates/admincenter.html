@@ -171,6 +171,12 @@
 						<span class="title">财经</span>
 						</a>
 					</li>
+					<li th:each="cate : ${category}">
+						<a th:href="@{/newsextra/}+${cate.cate_id}">
+							<i class="icon-hourglass"></i>
+							<span class="title" th:text="${cate.name}">财经</span>
+						</a>
+					</li>
 				</ul>
 				<!-- END SIDEBAR MENU -->
 			</div>
@@ -248,6 +254,9 @@
 										<div class="portlet-body">
 											<div class="tab-content">
 												<div class="tab-pane active" id="tab_1_1">
+													<div class="row">
+														<a href="/register.html"><button type="button" class="btn btn-circle btn-primary" style="margin-left:10px;margin-top:10px">+ 添加用户</button></a>
+													</div>
 														<div class="portlet-body">
 															<div id="sample_1_wrapper"
 																 class="dataTables_wrapper no-footer">

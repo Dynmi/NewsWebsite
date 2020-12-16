@@ -7,6 +7,7 @@ public class Comment {
     private String time;// 评论时间
     private int likes;// 评论点赞人数
     private int n_id;// 评论关联的新闻id
+    private boolean isreport;
 
     private User author;// 发表评论的人
     private boolean islike = false; // 当前用户是否点赞了该评论
@@ -74,5 +75,13 @@ public class Comment {
     public void setIslike(boolean islike) {
         this.islike = islike;
     }
+    public boolean isIsreport() {
+        return isreport;
+    }
+
+    public void setIsreport(boolean isreport) {
+        this.isreport = isreport;
+    }
+
 
 }

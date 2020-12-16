@@ -22,7 +22,7 @@ public class SensitiveWordService {
     public String wordsfilter(String text)
     {
         List<String> originwords= sensitiveWordDao.findAllWords();
-        String result = NewsFilterUtil.replaceWords(text,originwords);
+        String result = NewsFilterUtil.sensitiveHelper(text,originwords);
         return result;
     }
 
