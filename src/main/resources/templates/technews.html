@@ -47,7 +47,7 @@
 <!-- DOC: Apply "page-sidebar-reversed" class to put the sidebar on the right side -->
 <!-- DOC: Apply "page-full-width" class to the body element to have full width page without the sidebar menu -->
 
-<body class="page-boxed page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed-hide-logo">
+<body class="page-boxed page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-sidebar-closed-hide-logo" onload="userMessageReceive()">
 <!-- BEGIN HEADER -->
 <div class="page-header navbar navbar-fixed-top">
 	<!-- BEGIN HEADER INNER -->
@@ -99,7 +99,7 @@
 									<i class="icon-user"></i> 个人中心 </a>
 							</li>
 							<li>
-								<a href="/inbox.html">
+								<a href="/contributesubmit.html">
 									<i class="icon-envelope-open"></i> 投稿窗口
 								</a>
 							</li>
@@ -226,13 +226,12 @@
 															</div>
 														</div>
 													</div>
-												</div>
+												</div></a>
 												<div class="col2">
 													<div style="width:90px;margin-top:5px;font-style: italic;color:grey;cursor: not-allowed; " th:text="${m.time}">
 														2020-12-11
 													</div>
 												</div>
-											</a>
 										</li>
 
 									</ul>

@@ -29,15 +29,60 @@ public class NewsService {
         }
     }
 
-    //新闻发布逻辑
-    public String Edit(String title, String contents, String source, String category, String time,int id) {
+    //新闻投稿逻辑
+    public String contributesubmit(String title, String contents, String source, String category, String time) {
         //判断标题是否存在
         if (newsDao.getOneNews(title) == null) {
-            newsDao.updateNews(title,contents,source,category,time,id);
-            return "修改成功！";
+            newsDao.addcontribute(title,contents,source,category,time);
+            return "投稿成功！";
         }
         else {
             return "已存在相同标题新闻！";
+        }
+    }
+
+    //新闻修改逻辑
+    public String Edit(String title, String contents, String source, String category, String time,int id) {
+        //判断标题是否存在
+        if (newsDao.getOneNews(title) == null) {
+            newsDao.updateNews(title, contents, source, category, time, id);
+            return "修改成功！";
+        }
+        else
+        {
+            News news = newsDao.getOneNews(title);
+            Integer id_1=news.getN_id();
+            if(id_1==id)
+            {
+                newsDao.updateNews(title, contents, source, category, time, id);
+                return "修改成功！";
+            }
+            else
+            {
+                return "已存在相同标题新闻!";
+            }
+        }
+    }
+    //投稿修改/发布逻辑
+    public String Edittougao(String title, String contents, String source, String category, String time,int id) {
+        //判断标题是否存在
+        if (newsDao.getOneNews(title) == null) {
+            newsDao.updateTougao(title, contents, source, category, time, id);
+            return "发布投稿成功！";
+        }
+        else
+        {
+            News news = newsDao.getOneNews(title);
+            Integer id_1=news.getN_id();
+            if(id_1==id)
+            {
+                newsDao.updateTougao(title, contents, source, category, time, id);
+                return "发布投稿成功！";
+            }
+            else
+            {
+                return "已存在相同标题新闻!";
+            }
         }
     }
 
@@ -52,6 +97,13 @@ public class NewsService {
     public PageInfo findPageCate(int page, int pageSize,String category) {
         PageHelper.startPage(page,pageSize);
         List<News> list=newsDao.findnewsbycate(category);
+        PageInfo<News> pageInfo=new PageInfo<>(list); //将list（全部结果传进去） 泛型根据情况而定
+        return pageInfo;  //返回pageInfo对象给controller
+    }
+    //分页逻辑3
+    public PageInfo findtougaoPage(int page, int pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<News> list=newsDao.findtougaoAll();
         PageInfo<News> pageInfo=new PageInfo<>(list); //将list（全部结果传进去） 泛型根据情况而定
         return pageInfo;  //返回pageInfo对象给controller
     }

@@ -7,6 +7,17 @@ public class News {
     private String source;
     private String contents;
     private String category;
+    private boolean istougao;
+    private boolean iscollected = false;//浏览该新闻的用户是否已经收藏了该新闻
+
+    public void setIstougao(boolean istougao) {
+        this.istougao = istougao;
+    }
+
+    public boolean isIstougao() {
+        return istougao;
+    }
+
 
     public int getN_id() {
         return n_id;
@@ -54,6 +65,14 @@ public class News {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public boolean isIscollected() {
+        return iscollected;
+    }
+
+    public void setIscollected(boolean iscollected) {
+        this.iscollected = iscollected;
     }
 }
 

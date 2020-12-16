@@ -1,7 +1,6 @@
 package com.example.demo.dao;
 
 import com.example.demo.model.Comment;
-import com.example.demo.model.News;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Component;
 
@@ -26,8 +25,13 @@ public interface CommentDao {
 
     @Select("select *from comment where c_id=#{c_id} limit 1")
     Comment Getonecomment(int c_id);
+    
     @Insert({ "insert into ", TABLE_NAME, "(", INSERT_FIELDS, ") values (#{u_id},#{contents},#{n_id})" })
     void insertComment(int u_id, String contents, int n_id);
+
+    //改变评论的点赞数,+1还好是-1
+    @Update({ "update ", TABLE_NAME, "set likes=likes+#{change} where c_id=#{c_id}" })
+    void changeCommentLikes(int change, int c_id);
 
     @Delete({"delete from ", TABLE_NAME, " where c_id=#{id}"})
     void deleteCommentById(int id);

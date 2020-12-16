@@ -1,14 +1,16 @@
 package com.example.demo.model;
 
 public class Comment {
-    private int c_id;//评论id
-    private int u_id;//评论作者id
-    private String contents;//评论内容
-    private String time;//评论时间
-    private int likes;//评论点赞人数
-    private int n_id;//评论关联的新闻id
+    private int c_id;// 评论id
+    private int u_id;// 评论作者id
+    private String contents;// 评论内容
+    private String time;// 评论时间
+    private int likes;// 评论点赞人数
+    private int n_id;// 评论关联的新闻id
 
-    private User author;//发表评论的人
+    private User author;// 发表评论的人
+    private boolean islike = false; // 当前用户是否点赞了该评论
+
     public int getC_id() {
         return c_id;
     }
@@ -65,5 +67,12 @@ public class Comment {
         this.author = author;
     }
 
-    
+    public boolean isIslike() {
+        return islike;
+    }
+
+    public void setIslike(boolean islike) {
+        this.islike = islike;
+    }
+
 }

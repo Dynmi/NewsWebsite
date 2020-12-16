@@ -94,7 +94,7 @@
 									<i class="icon-user"></i> 个人中心 </a>
 							</li>
 							<li>
-								<a href="/inbox.html">
+								<a href="/contributesubmit.html">
 									<i class="icon-envelope-open"></i> 投稿窗口
 								</a>
 							</li>
@@ -213,13 +213,18 @@
 									<ul class="nav">
 										<li class="active">
 											<a href="JavaScript:">
-												<i class="icon-settings"></i>
+												<i class="icon-user"></i>
 												用户管理</a>
 										</li>
 										<li>
 											<a href="/newsmanage.html" target="_blank">
-												<i class="icon-check"></i>
+												<i class="icon-doc"></i>
 												新闻管理 </a>
+										</li>
+										<li>
+											<a href="/adminmail.html" target="_blank">
+												<i class="icon-folder"></i>
+												管理员信箱 </a>
 										</li>
 									</ul>
 								</div>
@@ -420,7 +425,7 @@ Profile.init(); // init page demo
 });
 function cpPassword() {
 	var cpPassword = [[${result}]];
-	if(result!=null)
+	if(cpPassword!=null)
 		alert(cpPassword);
 }
 

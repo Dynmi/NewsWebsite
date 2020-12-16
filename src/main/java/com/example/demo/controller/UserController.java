@@ -48,6 +48,7 @@ public class UserController {
     //注册用户，使用POST，传输数据
     @RequestMapping(value = "/register.html", method = RequestMethod.POST)
     public String registerPost(RedirectAttributes  model,
+                               Model m,
                                //这里和模板中的th:object="${user}"对应起来
                                @ModelAttribute(value = "user") User user,
                                HttpServletRequest request) {
@@ -57,9 +58,9 @@ public class UserController {
         if (result.equals("注册成功")) {
             request.getSession().setAttribute("user", user);
             model.addFlashAttribute("result", result);
-            return "index";
+            return "redirect:/index";
         } else if (result.equals("该用户名已被使用")) {
-            model.addFlashAttribute("result", result);
+            m.addAttribute("result", result);
             return "register";
         }
         return "register";
@@ -213,11 +214,12 @@ public class UserController {
         return "redirect:/admincenter";
     }
 
-    @PutMapping(value = "/namemanage/{username}")
+    @PutMapping(value = "/namemanage/{username}")//修改用户名
     public String EditUser(@PathVariable(value = "username") String oldusername, String username, RedirectAttributes model) {
         if (oldusername != null && username != null) {
-            userDao.updateUsername(oldusername, username);
-            model.addFlashAttribute("result", "更改成功！");
+            String result = userService.changename(oldusername,username);
+            model.addFlashAttribute("result", result);
+
         } else {
             model.addFlashAttribute("result", "用户名为空！");
         }
@@ -225,79 +227,7 @@ public class UserController {
         return "redirect:/admincenter";
     }
 
-    @RequestMapping(value = {"/newsmanage.html", "/newsmanage","/admincenter/newsmanage.html"})
-    public String newsmanage(Model m) {
-        PageInfo<News> pageInfo = newsService.findPage(1,10);//将新闻信息送往前端
-        List<News> news= pageInfo.getList();
-        m.addAttribute("pageInfo",pageInfo);
-        m.addAttribute("news", news);
-        return "newsmanage";
-    }
-    @RequestMapping(value = {"/newsmanage/list"})
-    public String newsrpage(Model m,
-                           @RequestParam(defaultValue = "1")int pageNum) {
-        PageInfo<News> pageInfo = newsService.findPage(pageNum,10);//将用户信息送往前端
-        List<News> news= pageInfo.getList();
-        m.addAttribute("pageInfo",pageInfo);
-        m.addAttribute("news", news);
-        return "newsmanage";
-    }
 
-
-    //新闻发布
-    @RequestMapping(value = {"/news_publish","/news_publish.html"})
-    public String newspub () {
-        return "news_publish";
-    }
-    @PostMapping(value = "/publishnews")
-    public String NewsPublish(Model model,
-                              String title, String contents, String source, String category, String time) {
-       if(title == null || title=="" || contents == null ||contents =="" ||source ==""||source==null||time==null||time=="")
-        {
-            model.addAttribute("result","填入内容不能为空！");
-                    return "news_publish";
-        }
-        else
-        {
-            String result = newsService.publish(title,contents,source,category,time);
-            model.addAttribute("result",result);
-            return "news_publish";
-        }
-
-    }
-
-    @DeleteMapping("/newsdelete/{n_id}")//删除新闻
-    public String deleteNews(@PathVariable("n_id") Integer n_id, Model model) {
-        if (n_id != null) {
-            newsDao.deleteById(n_id);
-            model.addAttribute("result", "删除成功！");
-        } else {
-            model.addAttribute("result", "新闻不存在！");
-        }
-        return "redirect:/newsmanage";
-    }
-
-    @RequestMapping("/newsedit/{n_id}")
-    public String newsedit (@PathVariable("n_id") Integer n_id, Model model) {
-        News editnews=newsDao.getOneNewsById(n_id);
-        model.addAttribute("editnews",editnews);
-        model.addAttribute("n_id",n_id);
-        return "news_edit";
-    }
-
-    @PostMapping(value = "/editnews")
-    public String NewsEdit(RedirectAttributes model,int newsid,
-                              String title, String contents, String source, String category, String time) {
-        if (title == null || title == "" || contents == null || contents == "" || source == "" || source == null || time == null || time == "") {
-            model.addFlashAttribute("result", "填入内容不能为空！");
-            return "redirect:/newsmanage";
-        } else {
-            String result = newsService.Edit(title, contents, source, category, time, newsid);
-            model.addFlashAttribute("result", result);
-            return "redirect:/newsmanage";
-        }
-
-    }
     @RequestMapping("/extra_profile.html")
     public String profile(){
         return "extra_profile";

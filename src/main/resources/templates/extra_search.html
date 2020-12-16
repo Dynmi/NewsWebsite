@@ -108,7 +108,7 @@ License: You must have a valid license purchased only from themeforest(the above
 									<i class="icon-user"></i> 个人中心 </a>
 							</li>
 							<li>
-								<a href="inbox.html">
+								<a href="/contributesubmit.html">
 									<i class="icon-envelope-open"></i> 投稿窗口
 								</a>
 							</li>
@@ -229,19 +229,22 @@ License: You must have a valid license purchased only from themeforest(the above
 													<li th:each="m : ${news}">
 														<a th:href="@{/newsitem/}+${m.n_id}" >
 															<div class="col1">
-																<div class="cont-col2">
-																		<div class="desc" style="font-size: 14px;" th:text="${m.title}">
-																			体育新闻测试
+																<div class="cont">
+																	<div class="cont-col2">
+																		<div class="desc">
+																			<div style="display: inline;font-size: 14px;"th:text="${m.title}">体育新闻测试</div>
+																			<div style="display: inline;">——</div>
+																			<div style="display: inline;"><small th:text="${m.category}">体育新闻</small></div>
 																		</div>
 																	</div>
 																</div>
 															</div>
-															<div class="col2">
-																<div style="width:90px;margin-top:5px;font-style: italic;color:grey;cursor: not-allowed; " th:text="${m.time}">
-																	2020-12-11
-																</div>
-															</div>
 														</a>
+														<div class="col2">
+															<div style="width:90px;margin-top:5px;font-style: italic;color:grey; " th:text="${m.time}">
+																2020-12-11
+															</div>
+														</div>
 													</li>
 												</ul>
 											</div>

@@ -72,6 +72,17 @@ public class UserService {
         return "修改成功！";
     }
 
+    public String changename(String oldname,String name)
+    {
+        if (userDao.getOneUser(name) == null) {
+            userDao.updateUsername(oldname, name);
+            return "更改成功！";
+        }
+        else {
+            return "该用户名已存在！";
+        }
+    }
+
     //分页逻辑
     public PageInfo findPage(int page, int pageSize) {
         PageHelper.startPage(page,pageSize);

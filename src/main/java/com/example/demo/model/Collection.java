@@ -1,9 +1,9 @@
 package com.example.demo.model;
 
 public class Collection {
-    private int n_id;
-    private int u_id;
-    private int c_id;
+    private int n_id;//收藏的新闻id
+    private int u_id;//收藏这个新闻的用户的id
+    private int c_id;//收藏记录的id，主码
     private String title;
 
     public int getC_id() {
