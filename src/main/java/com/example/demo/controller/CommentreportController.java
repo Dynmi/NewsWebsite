@@ -33,7 +33,7 @@ public class CommentreportController {
         {
             User users=userDao.getUserById(uid);
             String u1_name=users.getUsername();
-            if (u_name != null) {
+            if (u_name != null && u_name !="") {
                 commentreportService.report(u_name, u1_name,n_idnow);
                 model.addFlashAttribute("result", "举报成功,请等待管理员受理！");
             } else {

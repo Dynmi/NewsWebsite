@@ -2,8 +2,8 @@ package com.example.demo.model;
 
 public class Commentreport {
     private int report_id;
-    private String u1_name;  //被举报用户名
-    private String u_name; //举报者
+    private String u1_name;  //举报者
+    private String u_name; //被举报用户名
     private int n_id;//新闻id
 
     public int getReport_id() {

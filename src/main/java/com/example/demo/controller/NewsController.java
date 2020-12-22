@@ -18,7 +18,7 @@ import java.util.List;
 @Controller
 public class NewsController {
     @Autowired
-    CommentService CommentService;
+    private CommentService CommentService;
     @Autowired
     private UserDao userDao;
     @Autowired
@@ -38,7 +38,7 @@ public class NewsController {
     @Autowired
     private NewcategoryDao newcategoryDao;
     @Autowired
-    private CommentreportService commentreportService ;
+    private NewcategoryService newcategoryService;
     @Autowired
     private CommentreportDao commentreportDao;
 
@@ -128,8 +128,8 @@ public class NewsController {
         }
         else
         {
-            newcategoryDao.addNewcate(catename);
-            model.addFlashAttribute("result","添加成功！");
+            String result = newcategoryService.addcategory(catename);
+            model.addFlashAttribute("result",result);
             return "redirect:/newsmanage";
         }
 
@@ -354,6 +354,8 @@ public class NewsController {
                 news.setIscollected(true);
             }
         }
+        List<Newcategory> category=newcategoryDao.findAll();
+        model.addAttribute("category",category);
         model.addAttribute("pageInfo", pageInfo);
         model.addAttribute("comment", comment);
         model.addAttribute("news", news);
@@ -429,13 +431,13 @@ public class NewsController {
         if(title == null || title=="" || contents == null ||contents =="" ||source ==""||source==null||time==null||time=="")
         {
             model.addFlashAttribute("result","填入内容不能为空！");
-            return "index";
+            return "redirect:/index";
         }
         else
         {
             String result = newsService.contributesubmit(title,contents,source,category,time);
             model.addFlashAttribute("result",result);
-            return "index";
+            return "redirect:/index";
         }
 
     }

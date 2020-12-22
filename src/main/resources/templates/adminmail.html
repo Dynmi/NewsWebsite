@@ -298,11 +298,6 @@
 																		<th class="sorting_disabled"
 																			rowspan="1" colspan="1"
 																			aria-label="Status" style="width: 95px;">
-																			投稿用户
-																		</th>
-																		<th class="sorting_disabled"
-																			rowspan="1" colspan="1"
-																			aria-label="Status" style="width: 95px;">
 																			操作
 																		</th>
 
@@ -321,9 +316,6 @@
 																		</td>
 																		<td class="sorting_1" th:text="${m.source}">
 																			来源
-																		</td>
-																		<td class="sorting_1" th:text="${m.source}">
-																			投稿用户
 																		</td>
 																		<td>
 																			<div class="btn-group btn-group-sm btn-group-solid">
@@ -396,10 +388,10 @@
 																	</thead>
 																	<tbody>
 																	<tr class="gradeX even" role="row" th:each="r : ${report}">
-																		<td class="sorting_1" th:text="${r.u_name}">
+																		<td class="sorting_1" th:text="${r.u1_name}">
 																			举报人
 																		</td>
-																		<td  th:text="${r.u1_name}">
+																		<td  th:text="${r.u_name}">
 																			被举报人
 																		</td>
 																		<td>
